@@ -1,5 +1,5 @@
 {
-  "name": "@alechp/nofig",
+  "name": "nofig",
   "version": "0.1.0",
   "description": "Multitenant config management",
   "main": "index.js",
