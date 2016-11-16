@@ -12,11 +12,24 @@ const path    = require('path');
 const vorpal  = require('vorpal');
 const Promise = require('bluebird');
 
-export default class nofig {
-  constructor() {
-    
+let test = nofig();
+
+class nofig {
+  constructor(file) {
+    this.config = initializeConfigFile(file);
   }
-  loadConfigFile(fPath) { 
+
+  initializeConfigFile(file) {
+    this.loadConfigFile(file)
+    .then( config => {
+      parseConfigFile(config);
+    })
+    .catch( err => {
+      console.log(err);
+    })
+  }
+
+  loadConfigFile(configFile) { 
     return new Promise( (reject, resolve) => {
       fs.open(configFile, 'r', (err, fd) => {
         if(err) {
@@ -25,9 +38,13 @@ export default class nofig {
           } 
           reject(`nofig.json does not exist: ${err}`);
         } else {
-          resolve(true);
+          resolve(config);
         }
       })
     })
+  }
+
+  parseConfigFile(config) {
+    console.log(JSON.parse(config));
   }
 }
