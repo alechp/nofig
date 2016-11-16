@@ -1,6 +1,3 @@
-console.log('Hi. Published for namespace during development and branding. Come back December 15th <3');
-
-
 /*
   1. Find the config
   2. Import the loaders
@@ -10,26 +7,32 @@ console.log('Hi. Published for namespace during development and branding. Come b
 const fs      = require('fs');
 const path    = require('path');
 const vorpal  = require('vorpal');
+const chalk   = vorpal().chalk;
 const Promise = require('bluebird');
 
-let test = nofig();
+console.log(chalk.magenta('Hi. Published for namespace during development and branding. Come back December 15th <3'));
 
-class nofig {
+class Nofig {
   constructor(file) {
-    this.config = initializeConfigFile(file);
+    let test = this.initializeConfigFile(file);
+    console.log(`Initialize results: ${test}`);
   }
 
   initializeConfigFile(file) {
-    this.loadConfigFile(file)
+    this.confirmConfigFile(file)
     .then( config => {
-      parseConfigFile(config);
+      console.log(this.constructor.name);
+      return this.parseConfigFile(config);
+    })
+    .then( results => {
+      return console.log(results);
     })
     .catch( err => {
       console.log(err);
     })
   }
 
-  loadConfigFile(configFile) { 
+  confirmConfigFile(configFile) { 
     return new Promise( (reject, resolve) => {
       fs.open(configFile, 'r', (err, fd) => {
         if(err) {
@@ -38,13 +41,20 @@ class nofig {
           } 
           reject(`nofig.json does not exist: ${err}`);
         } else {
-          resolve(config);
+          console.log(`inside else: ${configFile}`);
+          resolve(configFile);
         }
       })
     })
   }
 
-  parseConfigFile(config) {
-    console.log(JSON.parse(config));
+  parseConfigFile(configFile) {
+    return new Promise( (reject, resolve) => {
+      resolve(console.log(JSON.parse(configFile)));
+    });
   }
 }
+
+
+let fileExists = new Nofig('nofig.template.json');
+// let fileDoesNotExist = new Nofig('foo');
